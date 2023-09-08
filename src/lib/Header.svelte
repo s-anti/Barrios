@@ -1,62 +1,66 @@
 <script>
-	// export let active = false;
-	import { link } from "svelte-spa-router";
 	import { _ } from "svelte-i18n";
+	import { link } from "svelte-spa-router";
+	let highlightedIndex = 4;
+
+	import LanguageChanger from "../components/LanguageChanger.svelte";
 </script>
 
-<header class="bg-slate-800 flex p-5 gap-5 items-center justify-between">
-	<!-- <button on:click={() => (active = !active)} class="flex items-center"
-		><span class="material-icons-round">menu</span></button
-	> -->
-	<nav>
-		<ul class="flex items-center gap-4">
-			<li class="">
-				<a
-					href="/propietarios"
-					use:link
-					class="shadow-md bg-slate-600 p-2 rounded-md dra flex items-center"
-				>
-					<span class="material-icons-round pr-2">people</span>
-					{$_("propietarios")}
-				</a>
-			</li>
-			<li class="">
-				<a
-					href="/lotes"
-					use:link
-					class="shadow-xl dr bg-slate-500 p-2 rounded-md dra flex items-center"
-				>
-					<span class="material-icons-round pr-2">home</span>{$_(
-						"lotes"
-					)}
-				</a>
-			</li>
-			<li class="">
-				<a
-					href="/consumos"
-					use:link
-					class="shadow-md bg-slate-600 p-2 rounded-md dra flex items-center"
-				>
-					<span class="material-icons-round pr-2">receipt_long</span
-					>{$_("consumos")}
-				</a>
-			</li>
-			<li class="">
-				<a
-					href="/costos"
-					use:link
-					class="shadow-md bg-slate-600 p-2 rounded-md dra flex items-center"
-				>
-					<span class="material-icons-round pr-2">payments</span>{$_(
-						"tablaCostos"
-					)}
-				</a>
-			</li>
-		</ul>
-	</nav>
-	<a href="/" use:link>
-		<h1 class="text-3xl font-black tracking-tight">
-			{$_("barriosPrivados")}
-		</h1>
-	</a>
-</header>
+<div class="w-full flex justify-between p-2 items-center">
+	<ul class="flex gap-4 flex-1">
+		<a
+			use:link
+			href="/propietarios"
+			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			0
+				? 'bg-primary text-background'
+				: 'bg-secondary'} "
+			on:click={() => (highlightedIndex = 0)}
+		>
+			{$_("propietarios")}
+		</a>
+
+		<a
+			use:link
+			href="/lotes"
+			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			1
+				? 'bg-primary text-background'
+				: 'bg-secondary'} "
+			on:click={() => (highlightedIndex = 1)}
+		>
+			{$_("lotes")}
+		</a>
+
+		<a
+			use:link
+			href="/consumos"
+			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			2
+				? 'bg-primary text-background'
+				: 'bg-secondary'} "
+			on:click={() => (highlightedIndex = 2)}
+		>
+			{$_("consumos")}
+		</a>
+
+		<a
+			use:link
+			href="/costos"
+			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			3
+				? 'bg-primary text-background'
+				: 'bg-secondary'} "
+			on:click={() => (highlightedIndex = 3)}
+		>
+			{$_("costos")}
+		</a>
+	</ul>
+	<div class="flex-1 flex items-center justify-center">
+		<h1 class="text-3xl font-black tracking-wide">{$_("titulo")}</h1>
+	</div>
+
+	<div class="flex-1 gap-3 flex w-full justify-end">
+		<LanguageChanger />
+	</div>
+</div>

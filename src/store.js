@@ -7,6 +7,7 @@ export const tablasInfo = writable({
 	lotes: null,
 	consumos: null,
 	costos: null,
+	propietario: null,
 });
 
 export const dataAhora = writable(null);
