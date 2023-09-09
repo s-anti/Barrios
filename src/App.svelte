@@ -24,7 +24,7 @@
 	import Table from "./components/Table.svelte";
 </script>
 
-<div class="h-full flex flex-col bg-background text-text">
+<div class="h-full flex flex-col text-white bg-stone-800">
 	<Header />
 	<main class="flex flex-col max-w-full h-full">
 		<div class="flex max-w-full flex-col items-center h-full w-full">
@@ -37,13 +37,20 @@
 					["Lotes", "texto"],
 				]}
 				usaAgregar={true}
+				funcAgregar={() => console.log("usaAgregar")}
 				usaEditar={true}
+				funcEditar={() => console.log("usaEditar")}
 				usaEliminar={true}
+				funcEliminar={() => console.log("usaEliminar")}
+				usaExpandir={true}
+				funcExpandir={() => console.log("usaExpandir")}
 				name="propietarios"
 			/>
 		</div>
 
-		<div class="border-t-2 border-accent shadow-inner rounded-t-lg">
+		<div
+			class="border-t-2 border-emerald-800 bg-stone-900 shadow-inner rounded-t-lg"
+		>
 			<p class="p-1 text-center font-extralight tracking-widest">
 				Santiago Piñero Cortez - 2023
 			</p>

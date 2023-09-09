@@ -6,15 +6,17 @@
 	import LanguageChanger from "../components/LanguageChanger.svelte";
 </script>
 
-<div class="w-full flex justify-between p-2 items-center">
+<div
+	class="w-full flex justify-between bg-emerald-800 p-2 items-center shadow-inner"
+>
 	<ul class="flex gap-4 flex-1">
 		<a
 			use:link
 			href="/propietarios"
-			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			class="s capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			0
-				? 'bg-primary text-background'
-				: 'bg-secondary'} "
+				? 'bg-stone-300 shadow-2xl '
+				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 0)}
 		>
 			{$_("propietarios")}
@@ -23,10 +25,10 @@
 		<a
 			use:link
 			href="/lotes"
-			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			class="s capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			1
-				? 'bg-primary text-background'
-				: 'bg-secondary'} "
+				? 'bg-stone-300 shadow-2xl '
+				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 1)}
 		>
 			{$_("lotes")}
@@ -35,10 +37,10 @@
 		<a
 			use:link
 			href="/consumos"
-			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			class="s capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			2
-				? 'bg-primary text-background'
-				: 'bg-secondary'} "
+				? 'bg-stone-300 shadow-2xl '
+				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 2)}
 		>
 			{$_("consumos")}
@@ -47,10 +49,10 @@
 		<a
 			use:link
 			href="/costos"
-			class="capitalize p-2 items-center text-center rounded-lg {highlightedIndex ===
+			class="s capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			3
-				? 'bg-primary text-background'
-				: 'bg-secondary'} "
+				? 'bg-stone-300 shadow-2xl '
+				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 3)}
 		>
 			{$_("costos")}

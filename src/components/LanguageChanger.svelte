@@ -19,7 +19,7 @@
 
 <div>
 	<button
-		class=" text-text p-0 h-fit flex items-center gap-2 border-2 border-primary px-2 rounded-full"
+		class=" text-text p-0 h-fit flex bg-stone-300 items-center gap-2 border-2 border-black text-black px-2 rounded-full"
 		on:click={switchLang}
 	>
 		<p class="material-icons-round text-2xl p-0">language</p>
