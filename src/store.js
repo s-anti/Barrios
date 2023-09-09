@@ -12,4 +12,4 @@ export const tablasInfo = writable({
 
 export const dataAhora = writable(null);
 
-export let idioma = "es";
+export let idioma = "en";

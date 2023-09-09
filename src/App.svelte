@@ -1,26 +1,34 @@
 <script>
 	import { _ } from "svelte-i18n";
 
+	import Router from "svelte-spa-router";
+
 	import Header from "./lib/Header.svelte";
+
+	import Default from "./views/Default.svelte";
+	import Vista404 from "./views/Vista404.svelte";
+	import Propietarios from "./views/Propietarios.svelte";
+	import Lotes from "./views/Lotes.svelte";
+	import Consumos from "./views/Consumos.svelte";
+	import Costos from "./views/Costos.svelte";
 
 	// import VistaLotes from "./lib/routes/VistaLotes.svelte";
 	// import VistaDefault from "./lib/routes/VistaDefault.svelte";
 	// import Vista404 from "./lib/routes/Vista404.svelte";
 	// import VistaPropietarios from "./lib/routes/VistaPropietarios.svelte";
 	// @ts-ignore
-	// import Router from "svelte-spa-router";
 	// import VistaConsumos from "./lib/routes/VistaConsumos.svelte";
 	// import VistaCostos from "./lib/routes/VistaCostos.svelte";
 	// import VistaUnPropietario from "./lib/routes/VistaUnPropietario.svelte";
-	// const routes = {
-	// 	"/": VistaDefault,
-	// 	"/lotes": VistaLotes,
-	// 	"/propietarios": VistaPropietarios,
-	// 	"/consumos": VistaConsumos,
-	// 	"/costos": VistaCostos,
-	// 	"/propietarios/:id": VistaUnPropietario,
-	// 	"*": Vista404,
-	// };
+	const routes = {
+		"/": Default,
+		"/propietarios": Propietarios,
+		"/lotes": Lotes,
+		"/consumos": Consumos,
+		"/costos": Costos,
+		// "/propietarios/:id": VistaUnPropietario,
+		"*": Vista404,
+	};
 	import Table from "./components/Table.svelte";
 </script>
 
@@ -28,24 +36,7 @@
 	<Header />
 	<main class="flex flex-col max-w-full h-full">
 		<div class="flex max-w-full flex-col items-center h-full w-full">
-			<!-- <Router {routes} /> -->
-			<Table
-				columns={[
-					["ID", "noumero"],
-					["Nombre", "texto"],
-					["Apellido", "texto"],
-					["Lotes", "texto"],
-				]}
-				usaAgregar={true}
-				funcAgregar={() => console.log("usaAgregar")}
-				usaEditar={true}
-				funcEditar={() => console.log("usaEditar")}
-				usaEliminar={true}
-				funcEliminar={() => console.log("usaEliminar")}
-				usaExpandir={true}
-				funcExpandir={() => console.log("usaExpandir")}
-				name="propietarios"
-			/>
+			<Router {routes} />
 		</div>
 
 		<div

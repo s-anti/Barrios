@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 import datetime
 
-barrios = Barrios("./API/barrioswerb.sqlite3", False)
+barrios = Barrios("./API/barrioswerb.sqlite3", True)
 
 barrios.crearTablas()
 barrios.insertarMuestras()
@@ -42,7 +42,10 @@ diccionario = {
 def hacerLista(datos):
     for i in range(len(datos)):
         for j in range(len(datos[i])):
-            datos[i][j] = list(datos[i][j].values())[0]
+            if len(datos[i][j].values()) == 1:
+                datos[i][j] = list(datos[i][j].values())[0]
+            else:
+                datos[i][j] = list(datos[i][j].values())
 
 
 def prop_id_dict(datos):
@@ -77,8 +80,7 @@ def lotes():
     )
 
     n_datos = prop_id_dict(datos)
-
-    # Todo el quilombo ese para pasar la id en el mismo diccionario que el nombre
+    hacerLista(n_datos)
 
     return jsonify(n_datos)
 
@@ -154,13 +156,25 @@ def proplotemes(id):
 @app.route("/consumos")
 def consumos():
     datos = barrios.fetchApi(
-        """SELECT c.cons_id, c.cons_lot_id, p.prop_nombre || ' ' || p.prop_apellido as "nombre", p.prop_id as "prop_id",  co.cos_mes, c.cons_seguridad, c.cons_luz, c.cons_agua, c.cons_gas, c.cons_luz_publica, c.cons_f_agua, c.cons_f_asf, c.cons_vehiculo
+        """SELECT c.cons_id, c.cons_lot_id, p.prop_nombre || ' ' || p.prop_apellido as "nombre", p.prop_id as "prop_id",  co.cos_mes, c.cons_seguridad, c.cons_luz, c.cons_agua, c.cons_gas, c.cons_luz_publica, c.cons_f_agua, c.cons_f_asf, c.cons_vehiculo, c.cons_seguridad +
+c.cons_luz +
+c.cons_agua +
+c.cons_gas +
+c.cons_luz_publica +
+c.cons_f_agua +
+c.cons_f_asf +
+c.cons_vehiculo as total, c.cons_pagado
         FROM Consumos c
         JOIN propietarios p on p.prop_id = c.cons_prop_id
         join Costos co on co.cos_id = c.cons_cost_id"""
     )
 
-    return jsonify(prop_id_dict(datos))
+    n_datos = prop_id_dict(datos)
+    hacerLista(n_datos)
+
+    print("tirando", n_datos[0], "\n" * 2, datos[0])
+
+    return jsonify(n_datos)
 
 
 @app.route("/consumos/<id>")
@@ -181,6 +195,8 @@ def consumosId(id):
 @app.route("/costos")
 def costos():
     datos = barrios.fetchApi("SELECT * FROM Costos")
+    hacerLista(datos)
+    print("Torando", datos)
     return jsonify(datos)
 
 

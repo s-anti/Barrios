@@ -110,6 +110,7 @@ class Barrios:
                 cons_f_agua FLOAT NOT NULL,
                 cons_f_asf FLOAT NOT NULL,
                 cons_vehiculo FLOAT NOT NULL,
+                cons_pagado BOOLEAN NOT NULL DEFAULT FALSE,
                 FOREIGN KEY (cons_lot_id) REFERENCES Lotes (lote_id),
                 FOREIGN KEY (cons_prop_id) REFERENCES Propietarios (prop_id),
                 FOREIGN KEY (cons_cost_id) REFERENCES Costos (cos_id),
@@ -357,7 +358,8 @@ class Barrios:
             transpuesta.append(f)
 
         self.cur.executemany(
-            "INSERT INTO Consumos Values (NULL,?,?,?,?,?,?,?,?,?,?,?)", transpuesta
+            "INSERT INTO Consumos Values (NULL,?,?,?,?,?,?,?,?,?,?,?, FALSE)",
+            transpuesta,
         )
 
         self.conn.commit()

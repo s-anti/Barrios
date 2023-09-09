@@ -1,8 +1,8 @@
 <script>
-	let currentLang = "🇦🇷";
+	let currentLang = "🇺🇸";
 
 	import { locale, locales } from "svelte-i18n";
-	$locale = "es";
+	$locale = "en";
 
 	console.log(locale, locales, $locale);
 
