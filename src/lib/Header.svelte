@@ -15,7 +15,7 @@
 			href="/propietarios"
 			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			0
-				? 'bg-stone-300 shadow-2xl '
+				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 0)}
 		>
@@ -27,7 +27,7 @@
 			href="/lotes"
 			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			1
-				? 'bg-stone-300 shadow-2xl '
+				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 1)}
 		>
@@ -39,7 +39,7 @@
 			href="/consumos"
 			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			2
-				? 'bg-stone-300 shadow-2xl '
+				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 2)}
 		>
@@ -51,7 +51,7 @@
 			href="/costos"
 			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			3
-				? 'bg-stone-300 shadow-2xl '
+				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
 			on:click={() => (highlightedIndex = 3)}
 		>

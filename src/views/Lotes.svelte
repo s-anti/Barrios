@@ -3,21 +3,25 @@
 	import { _ } from "svelte-i18n";
 </script>
 
-<Table
-	columns={[
-		[$_("id"), "numero"],
-		[$_("manzana"), "numero"],
-		[$_("propietario"), "propietario"],
+<div class="flex items-center justify-center h-full p-10 m-10 w-full">
+	<Table
+		columns={[
+			[$_("id"), "numero"],
+			[$_("manzana"), "numero"],
+			[$_("propietario"), "propietario"],
 
-		[$_("metrosFrente"), "metros"],
-		[$_("metrosProf"), "metros"],
-		[$_("luz"), "bool"],
-		[$_("gas"), "bool"],
-		[$_("asf"), "bool"],
-		[$_("esq"), "bool"],
-	]}
-	usaAgregar={true}
-	funcAgregar={() => console.log("usaAgregar")}
-	usaEditar={true}
-	name="lotes"
-/>
+			[$_("metrosFrente"), "metros"],
+			[$_("metrosProf"), "metros"],
+			[$_("luz"), "bool"],
+			[$_("gas"), "bool"],
+			[$_("asf"), "bool"],
+			[$_("esq"), "bool"],
+		]}
+		usaAgregar={true}
+		funcAgregar={() => console.log("usaAgregar")}
+		usaEditar={true}
+		name="lotes"
+		storeName="lotes"
+		table="lotes"
+	/>
+</div>

@@ -119,26 +119,51 @@ def propietarios():
     return jsonify(datos)
 
 
-@app.route("/propietarios_lotes/<id>")
-def propietario_lotes(id):
+@app.route("/propietarios/<id>/consumos")
+def propietario_id(id):
     datosProp = barrios.fetchApi(
-        """SELECT p.*
-        FROM Propietarios p
-        WHERE p.prop_id = {}
+        """SELECT pl_id, pl_lote_id, pl_superficie_cub, pl_habitantes, pl_vehiculos, pl_cons_luz, pl_cons_agua, pl_cons_gas, pl_cons_mes
+        FROM PropLoteMes c
+        WHERE c.pl_prop_id = {}
             """.format(
             id
         )
     )
+    hacerLista(datosProp)
+    print("Consuymos", datosProp)
+    return jsonify(datosProp)
 
+
+@app.route("/propietarios/<id>")
+def propietario_lotes(id):
     datosLotes = barrios.fetchApi(
-        """SELECT plv_lote_id, plv_fecha_compra
-        FROM PropLoteVenta
-        WHERE plv_prop_id = {}
-        AND plv_fecha_venta is null""".format(
+        """SELECT *
+        FROM Propietarios
+        WHERE prop_id = {}
+       """.format(
             id
         )
     )
-    return jsonify([datosProp, datosLotes])
+
+    hacerLista(datosLotes)
+    return jsonify(datosLotes)
+
+
+@app.route("/propietarios/<id>/pagos")
+def propietario_pagos(id):
+    datos = barrios.fetchApi(
+        """SELECT cons_id, cons_lot_id, cons_cost_id, cons_seguridad, cons_luz, cons_agua, cons_gas, cons_luz_publica, cons_f_agua, cons_f_asf, cons_vehiculo,
+         cons_seguridad + cons_luz + cons_agua + cons_gas + cons_luz_publica + cons_f_agua,
+ cons_pagado
+        FROM consumos
+        WHERE cons_prop_id = {}
+      """.format(
+            id
+        )
+    )
+
+    hacerLista(datos)
+    return jsonify(datos)
 
 
 @app.route("/prop_lote_mes/<id>")
