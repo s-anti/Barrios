@@ -47,6 +47,9 @@
 	function scroll(e) {
 		e.currentTarget.scrollLeft += e.deltaY * 0.3;
 	}
+
+	let coso = $tablasInfo[storeName];
+	$: coso = $tablasInfo[storeName];
 </script>
 
 <div class="w-full flex items-center h-full justify-between flex-col gap-5">
@@ -81,7 +84,7 @@
 				</button>
 			{/if}
 		</div>
-		{#if $tablasInfo[storeName] !== null}
+		{#if coso !== null}
 			<div
 				on:wheel|preventDefault={scroll}
 				class=" w-full mt-4 overflow-x-auto rounded-lg shadow-lg"
@@ -244,7 +247,7 @@
 	</div>
 	<!-- Paginador -->
 	{#if $tablasInfo[storeName] !== null}
-		{#if $tablasInfo[storeName].length > rowNumber + 1}
+		{#if $tablasInfo[storeName].length > rowNumber}
 			<div
 				class="flex items-center gap-4 p-1 bg-primary rounded-lg bg-emerald-800 text-white shadow-md w-fit justify-evenly"
 			>

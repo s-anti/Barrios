@@ -2,6 +2,8 @@
 	import Table from "../components/Table.svelte";
 	import { _ } from "svelte-i18n";
 	export let params = {};
+	import AgregarLoteProp from "../lib/modals/agregar/AgregarLoteProp.svelte";
+	let agregandoLote = false;
 	import { tablasInfo } from "../store";
 
 	const fetchData = (async () => {
@@ -20,6 +22,7 @@
 			};
 		});
 	});
+	console.log($tablasInfo["propietarioInfo"][0][1], "AAAAAAA");
 </script>
 
 {#if $tablasInfo["propietarioInfo"] != null}
@@ -83,7 +86,7 @@
 					altName="lotesConsumos"
 					usaAgregar={true}
 					funcAgregar={() => {
-						console.log("IMPLEMENTAR PORFI");
+						agregandoLote = true;
 					}}
 					storeName="propietarioConsumos"
 				/>
@@ -118,4 +121,13 @@
 			</div>
 		</div>
 	</div>
+{/if}
+{#if agregandoLote}
+	<AgregarLoteProp
+		id={params.id}
+		nombre={$tablasInfo["propietarioInfo"][0][1] +
+			" " +
+			$tablasInfo["propietarioInfo"][0][2]}
+		funcCerrar={() => (agregandoLote = false)}
+	/>
 {/if}

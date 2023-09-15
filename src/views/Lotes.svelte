@@ -1,6 +1,8 @@
 <script>
 	import Table from "../components/Table.svelte";
 	import { _ } from "svelte-i18n";
+	import AgregarLotes from "../lib/modals/agregar/AgregarLotes.svelte";
+	let agregando = false;
 </script>
 
 <div class="flex items-center justify-center h-full p-10 m-10 w-full">
@@ -18,10 +20,13 @@
 			[$_("esq"), "bool"],
 		]}
 		usaAgregar={true}
-		funcAgregar={() => console.log("usaAgregar")}
+		funcAgregar={() => (agregando = true)}
 		usaEditar={true}
 		name="lotes"
 		storeName="lotes"
 		table="lotes"
 	/>
+	{#if agregando}
+		<AgregarLotes funcCerrar={() => (agregando = false)} />
+	{/if}
 </div>

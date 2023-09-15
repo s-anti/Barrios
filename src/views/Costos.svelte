@@ -1,6 +1,8 @@
 <script>
 	import Table from "../components/Table.svelte";
 	import { _ } from "svelte-i18n";
+	import AgregarCosto from "../lib/modals/agregar/agregarCosto.svelte";
+	let agregando = false;
 </script>
 
 <div class="flex items-center justify-center h-full p-10 m-10 w-full">
@@ -19,11 +21,20 @@
 			[$_("cos_mes"), "mes"],
 		]}
 		usaAgregar={true}
-		funcAgregar={() => console.log("usaAgregar")}
+		funcAgregar={() => {
+			agregando = true;
+		}}
 		usaEditar={true}
 		usaEliminar={true}
 		name="costos"
 		storeName="costos"
 		table="costos"
 	/>
+	{#if agregando}
+		<AgregarCosto
+			funcCerrar={() => {
+				agregando = false;
+			}}
+		/>
+	{/if}
 </div>

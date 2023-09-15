@@ -7,8 +7,8 @@ barrios = Barrios("./API/barrioswerb.sqlite3", True)
 
 barrios.crearTablas()
 barrios.insertarMuestras()
-barrios.actualizar("2023-08")
 
+mesAhora = "2023-08"
 
 app = Flask(__name__)
 
@@ -53,35 +53,41 @@ def prop_id_dict(datos):
     for i, registro in enumerate(datos):
         n_datos.append([])
         for id, dato in enumerate(registro):
-            print(registro[3])
-
             if id == 2:
                 dato = {**dato, "p.prop_id": registro[3]["prop_id"]}
             if id == 3:
                 continue
             n_datos[i].append(dato)
 
+    barrios.actualizar(mesAhora)
     return n_datos
+
+
+@app.route("/mes/<mes>")
+def cambiarMes(mes):
+    mesAhora = mes
 
 
 @app.route("/lotes")
 def lotes():
     datos = barrios.fetchApi(
-        """SELECT l.lote_id, l.lote_manz_id, p.prop_nombre || ' ' || p.prop_apellido as "nombre", p.prop_id, l.lote_m_frente, l.lote_m_prof, l.lote_luz_bool, l.lote_agua_bool, l.lote_asf_bool, l.lote_esq_bool
+        """SELECT l.lote_id, l.lote_manz_id, xd.prop_nombre || ' ' || xd.prop_apellido as "nombre", xd.prop_id, l.lote_m_frente, l.lote_m_prof, l.lote_luz_bool, l.lote_agua_bool, l.lote_asf_bool, l.lote_esq_bool
         FROM Lotes l
-        LEFT JOIN  PropLoteMes pl on pl.pl_lote_id = l.lote_id
-        LEFT JOIN Propietarios p on p.prop_id = pl.pl_prop_id
+        LEFT JOIN  (select * from PropLoteMes pl  JOIN Propietarios p on p.prop_id = pl.pl_prop_id 
         where pl_cons_mes = (
         select p2.pl_cons_mes
         from proplotemes p2
-        where p2.pl_prop_id = p.prop_id
-        order by 1 desc
-        )"""
+        where p2.pl_prop_id = p.prop_id)) as xd
+         on xd.pl_lote_id = l.lote_id
+     
+        order by 1 asc
+        """
     )
 
     n_datos = prop_id_dict(datos)
     hacerLista(n_datos)
 
+    barrios.actualizar(mesAhora)
     return jsonify(n_datos)
 
 
@@ -97,12 +103,13 @@ def propietario(tabla, id):
                 id
             )
         )
+        barrios.actualizar(mesAhora)
         return jsonify(datos[0])
-
     else:
         datos = barrios.fetchApi(
             "SELECT * FROM {} WHERE {}_ID = {}".format(tabla, diccionario[tabla], id)
         )
+        barrios.actualizar(mesAhora)
         return jsonify(datos[0])
 
 
@@ -116,6 +123,7 @@ def propietarios():
 
     hacerLista(datos)
 
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -131,6 +139,7 @@ def propietario_id(id):
     )
     hacerLista(datosProp)
     print("Consuymos", datosProp)
+    barrios.actualizar(mesAhora)
     return jsonify(datosProp)
 
 
@@ -146,6 +155,7 @@ def propietario_lotes(id):
     )
 
     hacerLista(datosLotes)
+    barrios.actualizar(mesAhora)
     return jsonify(datosLotes)
 
 
@@ -163,6 +173,7 @@ def propietario_pagos(id):
     )
 
     hacerLista(datos)
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -175,6 +186,7 @@ def proplotemes(id):
             id
         )
     )
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -197,8 +209,9 @@ c.cons_vehiculo as total, c.cons_pagado
     n_datos = prop_id_dict(datos)
     hacerLista(n_datos)
 
-    print("tirando", n_datos[0], "\n" * 2, datos[0])
+    # print("tirando", n_datos[0], "\n" * 2, datos[0])
 
+    barrios.actualizar(mesAhora)
     return jsonify(n_datos)
 
 
@@ -214,6 +227,7 @@ def consumosId(id):
         )
     )
 
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -222,6 +236,7 @@ def costos():
     datos = barrios.fetchApi("SELECT * FROM Costos")
     hacerLista(datos)
     print("Torando", datos)
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -241,6 +256,7 @@ def cargar(tabla):
 
     barrios.insertar(f"INSERT INTO {tabla} ({keys}) VALUES ({signos}) ", lista)
     print("Cargamos algo ponele")
+    barrios.actualizar(mesAhora)
     return "ponele que "
 
 
@@ -260,6 +276,7 @@ def editar(tabla):
     barrios.ejecutar(
         "UPDATE {} SET {} WHERE {} = {}".format(tabla, sets, keys[0], lista[0])
     )
+    barrios.actualizar(mesAhora)
     return "Algo pasó..."
 
 
@@ -273,6 +290,7 @@ def lotes_libre():
             or pl.plv_fecha_venta is not null"""
     )
     print("Los datos son", datos)
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -284,6 +302,7 @@ def proplotemesxd():
             JOIN propietarios p on p.prop_id = pl.pl_prop_id
             """
     )
+    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -298,6 +317,7 @@ def proplote():
 
     print("datos son", datos)
 
+    barrios.actualizar(mesAhora)
     return jsonify(prop_id_dict(datos))
 
 
@@ -311,6 +331,7 @@ def actualizar(mes):
         JOIN propietarios p on p.prop_id = c.cons_prop_id"""
     )
 
+    barrios.actualizar(mesAhora)
     return jsonify(prop_id_dict(datos))
 
 
@@ -327,6 +348,7 @@ def eliminar(id):
     )
     print(datetime.date.today())
 
+    barrios.actualizar(mesAhora)
     return propietarios()
 
 
@@ -340,24 +362,35 @@ def prop_vende_lote(idProp, idLote):
         )
     )
 
+    barrios.actualizar(mesAhora)
     return propietario_lotes(idProp)
 
 
 @app.route("/lotes_de/<quien>")
 def lotesDe(quien):
+    datos = barrios.fetchApi(
+        """SELECT l.lote_id
+            FROM lotes l
+            LEFT JOIN PropLoteVenta pl ON l.lote_id = pl.plv_lote_id
+            WHERE pl.plv_lote_id IS NULL
+            or pl.plv_fecha_venta is not null"""
+    )
+
     data = barrios.fetchApi(
-        """select pl_lote_id
+        """select pl_lote_id as 
     from propLoteMes
     where pl_prop_id = {}
 """.format(
             quien
         )
     )
+    barrios.actualizar(mesAhora)
     return jsonify([list(i[0].values())[0] for i in data])
 
 
 @app.errorhandler(404)
 def not_found(error):
+    barrios.actualizar(mesAhora)
     return jsonify({"error": "Not found"}), 404
 
 

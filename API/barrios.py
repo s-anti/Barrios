@@ -248,7 +248,7 @@ class Barrios:
                 mes
             )
         )
-
+        print("Nos tira", datos)
         if len(datos) == 0:
             print("Algo faltó")
             return
@@ -357,7 +357,9 @@ class Barrios:
                 f.append(lista[j][i])
             transpuesta.append(f)
 
-        self.cur.executemany(
+        cur = self.conn.cursor()
+
+        cur.executemany(
             "INSERT INTO Consumos Values (NULL,?,?,?,?,?,?,?,?,?,?,?, FALSE)",
             transpuesta,
         )
