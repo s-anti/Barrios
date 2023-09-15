@@ -59,7 +59,6 @@ def prop_id_dict(datos):
                 continue
             n_datos[i].append(dato)
 
-    barrios.actualizar(mesAhora)
     return n_datos
 
 
@@ -87,7 +86,6 @@ def lotes():
     n_datos = prop_id_dict(datos)
     hacerLista(n_datos)
 
-    barrios.actualizar(mesAhora)
     return jsonify(n_datos)
 
 
@@ -103,13 +101,13 @@ def propietario(tabla, id):
                 id
             )
         )
-        barrios.actualizar(mesAhora)
+
         return jsonify(datos[0])
     else:
         datos = barrios.fetchApi(
             "SELECT * FROM {} WHERE {}_ID = {}".format(tabla, diccionario[tabla], id)
         )
-        barrios.actualizar(mesAhora)
+
         return jsonify(datos[0])
 
 
@@ -123,7 +121,6 @@ def propietarios():
 
     hacerLista(datos)
 
-    barrios.actualizar(mesAhora)
     return jsonify(datos)
 
 
@@ -138,8 +135,9 @@ def propietario_id(id):
         )
     )
     hacerLista(datosProp)
-    print("Consuymos", datosProp)
     barrios.actualizar(mesAhora)
+    print("Consuymos", datosProp)
+
     return jsonify(datosProp)
 
 
@@ -155,7 +153,7 @@ def propietario_lotes(id):
     )
 
     hacerLista(datosLotes)
-    barrios.actualizar(mesAhora)
+
     return jsonify(datosLotes)
 
 
@@ -173,7 +171,7 @@ def propietario_pagos(id):
     )
 
     hacerLista(datos)
-    barrios.actualizar(mesAhora)
+
     return jsonify(datos)
 
 
@@ -186,7 +184,7 @@ def proplotemes(id):
             id
         )
     )
-    barrios.actualizar(mesAhora)
+
     return jsonify(datos)
 
 
@@ -212,6 +210,7 @@ c.cons_vehiculo as total, c.cons_pagado
     # print("tirando", n_datos[0], "\n" * 2, datos[0])
 
     barrios.actualizar(mesAhora)
+
     return jsonify(n_datos)
 
 
@@ -228,6 +227,7 @@ def consumosId(id):
     )
 
     barrios.actualizar(mesAhora)
+
     return jsonify(datos)
 
 
@@ -236,7 +236,7 @@ def costos():
     datos = barrios.fetchApi("SELECT * FROM Costos")
     hacerLista(datos)
     print("Torando", datos)
-    barrios.actualizar(mesAhora)
+
     return jsonify(datos)
 
 
@@ -256,13 +256,14 @@ def cargar(tabla):
 
     barrios.insertar(f"INSERT INTO {tabla} ({keys}) VALUES ({signos}) ", lista)
     print("Cargamos algo ponele")
-    barrios.actualizar(mesAhora)
+
     return "ponele que "
 
 
 @app.route("/editar/<tabla>", methods=["POST"])
 def editar(tabla):
     datos = request.form.to_dict()
+    print("traemos", datos)
 
     keys = list(datos.keys())
     lista = list(datos.values())
@@ -272,11 +273,10 @@ def editar(tabla):
         jxd = j if j is int else f"'{j}'"
         sets += f"{i} = {jxd}, "
     sets = sets[:-2]
-
     barrios.ejecutar(
         "UPDATE {} SET {} WHERE {} = {}".format(tabla, sets, keys[0], lista[0])
     )
-    barrios.actualizar(mesAhora)
+
     return "Algo pasó..."
 
 
@@ -290,7 +290,7 @@ def lotes_libre():
             or pl.plv_fecha_venta is not null"""
     )
     print("Los datos son", datos)
-    barrios.actualizar(mesAhora)
+
     return jsonify(datos)
 
 
@@ -302,7 +302,7 @@ def proplotemesxd():
             JOIN propietarios p on p.prop_id = pl.pl_prop_id
             """
     )
-    barrios.actualizar(mesAhora)
+
     return jsonify(datos)
 
 
@@ -317,7 +317,6 @@ def proplote():
 
     print("datos son", datos)
 
-    barrios.actualizar(mesAhora)
     return jsonify(prop_id_dict(datos))
 
 
@@ -331,7 +330,6 @@ def actualizar(mes):
         JOIN propietarios p on p.prop_id = c.cons_prop_id"""
     )
 
-    barrios.actualizar(mesAhora)
     return jsonify(prop_id_dict(datos))
 
 
@@ -348,7 +346,6 @@ def eliminar(id):
     )
     print(datetime.date.today())
 
-    barrios.actualizar(mesAhora)
     return propietarios()
 
 
@@ -362,35 +359,31 @@ def prop_vende_lote(idProp, idLote):
         )
     )
 
-    barrios.actualizar(mesAhora)
     return propietario_lotes(idProp)
 
 
 @app.route("/lotes_de/<quien>")
 def lotesDe(quien):
     datos = barrios.fetchApi(
-        """SELECT l.lote_id
+        """SELECT l.lote_id as  pl_lote_id
             FROM lotes l
             LEFT JOIN PropLoteVenta pl ON l.lote_id = pl.plv_lote_id
             WHERE pl.plv_lote_id IS NULL
-            or pl.plv_fecha_venta is not null"""
-    )
-
-    data = barrios.fetchApi(
-        """select pl_lote_id as 
+            or pl.plv_fecha_venta is not null
+union
+       select pl_lote_id
     from propLoteMes
     where pl_prop_id = {}
 """.format(
             quien
         )
     )
-    barrios.actualizar(mesAhora)
-    return jsonify([list(i[0].values())[0] for i in data])
+
+    return jsonify([list(i[0].values())[0] for i in datos])
 
 
 @app.errorhandler(404)
 def not_found(error):
-    barrios.actualizar(mesAhora)
     return jsonify({"error": "Not found"}), 404
 
 

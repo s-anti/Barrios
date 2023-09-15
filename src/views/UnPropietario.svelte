@@ -22,7 +22,6 @@
 			};
 		});
 	});
-	console.log($tablasInfo["propietarioInfo"][0][1], "AAAAAAA");
 </script>
 
 {#if $tablasInfo["propietarioInfo"] != null}
@@ -122,7 +121,7 @@
 		</div>
 	</div>
 {/if}
-{#if agregandoLote}
+{#if agregandoLote && $tablasInfo["propietarioInfo"] != null}
 	<AgregarLoteProp
 		id={params.id}
 		nombre={$tablasInfo["propietarioInfo"][0][1] +

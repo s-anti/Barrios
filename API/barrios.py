@@ -113,15 +113,15 @@ class Barrios:
                 cons_pagado BOOLEAN NOT NULL DEFAULT FALSE,
                 FOREIGN KEY (cons_lot_id) REFERENCES Lotes (lote_id),
                 FOREIGN KEY (cons_prop_id) REFERENCES Propietarios (prop_id),
-                FOREIGN KEY (cons_cost_id) REFERENCES Costos (cos_id),
-                CONSTRAINT combinacion UNIQUE (cons_prop_id, cons_lot_id, cons_cost_id)
+                FOREIGN KEY (cons_cost_id) REFERENCES Costos (cos_id) --,
+               -- CONSTRAINT combinacion UNIQUE (cons_prop_id, cons_lot_id, cons_cost_id)
             )"""
         )
         print("Terminamos de crear las tablas")
 
     def fetchDatos(self, query: str):
         cur = self.conn.cursor()
-
+        print("Query es ", query)
         cur.execute(query)
         a = cur.fetchall()
         cur.close()

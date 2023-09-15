@@ -192,7 +192,8 @@
 											class="flex items-center justify-center"
 										>
 											<button
-												on:click={funcEditar}
+												on:click={() =>
+													funcEditar(row[0])}
 												class=" rounded-full flex items-center justify-center"
 											>
 												<span

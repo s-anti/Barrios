@@ -6,7 +6,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	class="flex items-center justify-center absolute top-0 h-full w-full bg-stone-900 bg-opacity-70"
+	class="flex z-40 items-center justify-center absolute top-0 h-full w-full bg-stone-900 bg-opacity-70"
 	on:click={funcCerrar}
 >
 	<div
