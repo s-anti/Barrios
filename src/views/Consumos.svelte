@@ -13,12 +13,18 @@
 	}
 </script>
 
-<div class="m-4">
+<div class="m-4 bg-stone-600 p-2 rounded-full shadow-lg">
 	<label for="mesAhora" class="capitalize pr-2">{$_("mes")}:</label>
-	<input bind:value={mes} name="mesAhora" type="month" on:change={xd} />
+	<input
+		bind:value={mes}
+		class=" rounded-lg pl-1"
+		name="mesAhora"
+		type="month"
+		on:change={xd}
+	/>
 </div>
 
-<div class="flex flex-col items-center justify-center h-full p-10 m-10 w-full">
+<div class="flex flex-col justify-center h-full px-10 mx-10 w-full">
 	<Table
 		columns={[
 			[$_("id"), "numero"],

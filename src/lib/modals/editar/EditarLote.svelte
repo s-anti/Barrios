@@ -16,8 +16,6 @@
 	if ($tablasInfo == null) {
 		console.log("Es null y salió todo mal");
 	}
-
-	console.log($tablasInfo.propietarios);
 </script>
 
 <ModalEditar {cerrar} tabla="propietarios" titulo={$_("editandoLote")}>
@@ -31,14 +29,14 @@
 					<div class="flex gap-3">
 						<div class="">
 							<p>ID</p>
-							<p class="text-stone-300 font-light">
+							<p class="text-stone-300 capitalize font-light">
 								{Object.values(data[0])}
 							</p>
 						</div>
 
 						<div class="">
 							<p class="capitalize">{$_("manzana")}</p>
-							<p class="text-stone-300 font-light">
+							<p class="text-stone-300 capitalize font-light">
 								{Object.values(data[1])}
 							</p>
 						</div>
@@ -46,11 +44,11 @@
 					<div>
 						<p class="capitalize">{$_("propietario")}</p>
 						{#if Object.values(data[8])[0] != null}
-							<p class="text-stone-300 font-light">
+							<p class="text-stone-300 capitalize font-light">
 								{Object.values(data[8])}
 							</p>
 						{:else}
-							<p class="text-stone-300 font-light">
+							<p class="text-stone-300 capitalize font-light">
 								{$_("ninguno")}
 							</p>
 						{/if}
@@ -64,7 +62,7 @@
 					</div>
 					<div>
 						<p class="capitalize">{$_("metrosFrente")}</p>
-						<p class="text-stone-300 font-light">
+						<p class="text-stone-300 capitalize font-light">
 							{Object.values(data[2])}
 						</p>
 						<input
@@ -79,7 +77,7 @@
 					</div>
 					<div>
 						<p class="capitalize">{$_("metrosProf")}</p>
-						<p class="text-stone-300 font-light">
+						<p class="text-stone-300 capitalize font-light">
 							{Object.values(data[3])}
 						</p>
 						<input
@@ -93,36 +91,88 @@
 						/>
 					</div>
 				</div>
-				<div class="flex flex-col justify-evenly items-center">
+				<div class="flex flex-col justify-evenly items-stretch">
 					<div>
 						<p class="capitalize">{$_("tieneLuz")}</p>
-						<p class="text-stone-300 font-light">
-							{Object.values(data[4])}
-						</p>
+						<div class="flex w-full justify-between">
+							<p class="text-stone-300 capitalize font-light">
+								{$_("antes")}:
+							</p>
+							{#if String(Object.values(data[4])) == "true"}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-green-500 w-7 h-7 flex items-center justify-center"
+									>check</span
+								>
+							{:else}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-red-500 w-7 h-7 flex items-center justify-center"
+									>close</span
+								>
+							{/if}
+						</div>
 						<input class="rounded-md pl-2" type="checkbox" />
 					</div>
 
 					<div>
 						<p class="capitalize">{$_("tieneAgua")}</p>
-						<p class="text-stone-300 font-light">
-							{Object.values(data[5])}
-						</p>
+						<div class="flex w-full justify-between">
+							<p class="text-stone-300 capitalize font-light">
+								{$_("antes")}:
+							</p>
+							{#if String(Object.values(data[5])) == "true"}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-green-500 w-7 h-7 flex items-center justify-center"
+									>check</span
+								>
+							{:else}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-red-500 w-7 h-7 flex items-center justify-center"
+									>close</span
+								>
+							{/if}
+						</div>
 						<input class="rounded-md pl-2" type="checkbox" />
 					</div>
 
 					<div>
 						<p class="capitalize">{$_("tieneAsfalto")}</p>
-						<p class="text-stone-300 font-light">
-							{Object.values(data[6])}
-						</p>
+						<div class="flex w-full justify-between">
+							<p class="text-stone-300 capitalize font-light">
+								{$_("antes")}:
+							</p>
+							{#if String(Object.values(data[6])) == "true"}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-green-500 w-7 h-7 flex items-center justify-center"
+									>check</span
+								>
+							{:else}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-red-500 w-7 h-7 flex items-center justify-center"
+									>close</span
+								>
+							{/if}
+						</div>
 						<input class="rounded-md pl-2" type="checkbox" />
 					</div>
 
 					<div>
 						<p class="capitalize">{$_("tieneEsquina")}</p>
-						<p class="text-stone-300 font-light">
-							{Object.values(data[7])}
-						</p>
+						<div class="flex w-full justify-between">
+							<p class="text-stone-300 capitalize font-light">
+								{$_("antes")}:
+							</p>
+							{#if String(Object.values(data[7])) == "true"}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-green-500 w-7 h-7 flex items-center justify-center"
+									>check</span
+								>
+							{:else}
+								<span
+									class="material-icons-round font-black bg-stone-500 rounded-full text-red-500 w-7 h-7 flex items-center justify-center"
+									>close</span
+								>
+							{/if}
+						</div>
 						<input class="rounded-md pl-2" type="checkbox" />
 					</div>
 				</div>

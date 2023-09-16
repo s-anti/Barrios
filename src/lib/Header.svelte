@@ -7,13 +7,13 @@
 </script>
 
 <div
-	class="w-full flex justify-between bg-emerald-800 p-2 items-center shadow-inner"
+	class="w-full flex gap-10 justify-between bg-emerald-800 p-2 items-center shadow-inner"
 >
 	<ul class="flex gap-4 flex-1">
 		<a
 			use:link
 			href="/propietarios"
-			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
+			class="transition whitespace-nowrap hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			0
 				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
@@ -25,7 +25,7 @@
 		<a
 			use:link
 			href="/lotes"
-			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
+			class="transition whitespace-nowrap hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			1
 				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
@@ -37,7 +37,7 @@
 		<a
 			use:link
 			href="/consumos"
-			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
+			class="transition whitespace-nowrap hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			2
 				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
@@ -49,7 +49,7 @@
 		<a
 			use:link
 			href="/costos"
-			class="transition hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
+			class="transition whitespace-nowrap hover:bg-emerald-300 hover:scale-105 capitalize p-2 items-center text-black text-center rounded-lg {highlightedIndex ===
 			3
 				? 'bg-stone-300 hover:bg-stone-200 shadow-2xl '
 				: 'bg-emerald-400  shadow-lg'} "
@@ -58,7 +58,9 @@
 			{$_("costos")}
 		</a>
 	</ul>
-	<div class="flex-1 flex items-center justify-center">
+	<div
+		class="flex-1 hidden whitespace-nowrap lg:flex items-center justify-center"
+	>
 		<a
 			on:click={() => (highlightedIndex = -1)}
 			use:link

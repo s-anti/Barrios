@@ -72,6 +72,12 @@
     "precioM2Terreno": "Terrain value per m2",
     "mesPrecios": "Month",
     "supCubierta": "built surface",
-    "consLuz": "electricity use (kw/h)"
+    "consLuz": "electricity use (kw/h)",
+    "antes": "before",
+    "tieneLuz": "Has electricity",
+    "tieneAgua": "Has water",
+
+    "tieneAsfalto": "Has electricity",
+    "tieneEsq": "Is in a corner"
 
 }

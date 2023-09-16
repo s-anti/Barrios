@@ -5,6 +5,8 @@
 	import AgregarLoteProp from "../lib/modals/agregar/AgregarLoteProp.svelte";
 	let agregandoLote = false;
 	import { tablasInfo } from "../store";
+	import EditarPropietario from "../lib/modals/editar/EditarPropietario.svelte";
+	let editando = false;
 
 	const fetchData = (async () => {
 		const response = await fetch(
@@ -25,8 +27,8 @@
 </script>
 
 {#if $tablasInfo["propietarioInfo"] != null}
-	<div class="flex w-full h-full items-center justify-between gap-5 p-20">
-		<div class="  flex flex-col gap-5 bg-stone-700 rounded-xl p-5 h-full">
+	<div class="flex w-full h-min items-center justify-evenly gap-5 p-12">
+		<div class=" flex flex-col gap-5 bg-stone-700 rounded-xl p-5 h-full">
 			<h1 class="text-3xl text-center capitalize">
 				{$_("info")}
 			</h1>
@@ -43,7 +45,7 @@
 			<div class="flex items-center gap-5 justify-evenly h-full">
 				<div class="flex items-center justify-center">
 					<button
-						on:click={() => console.log("xd")}
+						on:click={() => (editando = true)}
 						class="hover:scale-110 shadow-md hover:shadow-xl transition rounded-full flex items-center justify-center"
 					>
 						<span
@@ -65,8 +67,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="flex h-full gap-5 justify-between items-center flex-col">
-			<div class="w-10/12">
+		<div class="  items-center flex w-min h-min gap-5 flex-col">
+			<div
+				class="xl:w-[68rem] 2xl:w-full lg:w-[50rem] sm:w-[32rem] md:w-[35rem]"
+			>
 				<Table
 					rowNumber={3}
 					columns={[
@@ -90,7 +94,9 @@
 					storeName="propietarioConsumos"
 				/>
 			</div>
-			<div class="w-10/12">
+			<div
+				class="xl:w-[68rem] 2xl:w-full lg:w-[50rem] sm:w-[32rem] md:w-[35rem]"
+			>
 				<Table
 					rowNumber={3}
 					columns={[
@@ -128,5 +134,13 @@
 			" " +
 			$tablasInfo["propietarioInfo"][0][2]}
 		funcCerrar={() => (agregandoLote = false)}
+	/>
+{/if}
+{#if editando}
+	<EditarPropietario
+		cerrar={() => {
+			editando = false;
+		}}
+		idEditando={params.id}
 	/>
 {/if}
