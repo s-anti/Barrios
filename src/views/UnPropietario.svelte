@@ -24,6 +24,9 @@
 			};
 		});
 	});
+
+	let dataProp = $tablasInfo["propietarioInfo"];
+	$: dataProp = $tablasInfo["propietarioInfo"];
 </script>
 
 {#if $tablasInfo["propietarioInfo"] != null}
@@ -32,7 +35,7 @@
 			<h1 class="text-3xl text-center capitalize">
 				{$_("info")}
 			</h1>
-			{#each $tablasInfo["propietarioInfo"][0] as data, i}
+			{#each dataProp[0] as data, i}
 				<div class=" bg-stone-500 w-full rounded-md">
 					<p
 						class="px-2 p-1 uppercase w-full border-b text-stone-200 border-stone-200 text-sm font-semibold"

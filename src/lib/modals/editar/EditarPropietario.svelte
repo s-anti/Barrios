@@ -19,18 +19,18 @@
 			`Es null y salió todo mal, creo que tendríasque abrir la tabla ${"propietarios"} primero`
 		);
 	}
-	let formData = {};
 </script>
 
-<ModalEditar {formData} {cerrar} tabla={"propietarios"} titulo={$_("editProp")}>
+<ModalEditar {cerrar} tabla={"propietarios"} titulo={$_("editProp")}>
 	<div slot="formContent" class=" w-full h-min flex flex-col -p-5">
 		{#await fetchData then data}
 			<div class="flex items-center justify-evenly flex-col">
 				<label for="prop_id">ID:</label>
-				<input bind:value={formData["prop_id"]}
+				<input
 					class="text-white px-2 rounded-md"
 					type="text"
 					name="prop_id"
+					id="prop_id"
 					value={data[0].prop_id}
 					readonly
 				/>
@@ -42,6 +42,7 @@
 					class="bg-white text-black rounded-md outline-none px-2"
 					type="text"
 					name="prop_nombre"
+					id="prop_nombre"
 					required
 					value={data[1].prop_nombre}
 				/>
@@ -53,6 +54,7 @@
 					class="bg-white text-black rounded-md outline-none px-2"
 					type="text"
 					name="prop_apellido"
+					id="prop_apellido"
 					required
 					value={data[2].prop_apellido}
 				/>

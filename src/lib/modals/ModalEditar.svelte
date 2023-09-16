@@ -9,10 +9,14 @@
 	let form;
 
 	const enviar = async () => {
-		const formData = new FormData(form);
-		console.log(form);
-		console.log(formData);
+		console.log("form es: ", form);
 
+		const formData = new FormData(form);
+		console.log("formData es: ", formData);
+
+		for (var [key, value] of formData.entries()) {
+			console.log("AAAAAAAA", key, value);
+		}
 		fetch(`http://127.0.0.1:5000/editar/${tabla}`, {
 			method: "POST",
 
@@ -28,9 +32,8 @@
 					[tabla]: d,
 				};
 			});
-
-			cerrar();
 		});
+		cerrar();
 	};
 	// ESTO LO COPIAMOS PERO PONELE QUE TRANQUI
 	// LO PODRÍAMOS ELEVAR A Modal.SVELTE PERO FUE
