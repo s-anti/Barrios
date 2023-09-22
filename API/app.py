@@ -7,8 +7,9 @@ barrios = Barrios("./API/barrioswerb.sqlite3", True)
 
 barrios.crearTablas()
 barrios.insertarMuestras()
+barrios.actualizar()
+barrios.actualizar()
 
-mesAhora = "2023-08"
 
 app = Flask(__name__)
 
@@ -135,8 +136,7 @@ def propietario_id(id):
         )
     )
     hacerLista(datosProp)
-    barrios.actualizar(mesAhora)
-    print("Consuymos", datosProp)
+    barrios.actualizar()
 
     return jsonify(datosProp)
 
@@ -162,7 +162,7 @@ def propietario_pagos(id):
     datos = barrios.fetchApi(
         """SELECT cons_id, cons_lot_id, cons_cost_id, cons_seguridad, cons_luz, cons_agua, cons_gas, cons_luz_publica, cons_f_agua, cons_f_asf, cons_vehiculo,
          cons_seguridad + cons_luz + cons_agua + cons_gas + cons_luz_publica + cons_f_agua,
- cons_pagado
+ cons_fecha_pago
         FROM consumos
         WHERE cons_prop_id = {}
       """.format(
@@ -190,6 +190,8 @@ def proplotemes(id):
 
 @app.route("/consumos")
 def consumos():
+    barrios.actualizar()
+
     datos = barrios.fetchApi(
         """SELECT c.cons_id, c.cons_lot_id, p.prop_nombre || ' ' || p.prop_apellido as "nombre", p.prop_id as "prop_id",  co.cos_mes, c.cons_seguridad, c.cons_luz, c.cons_agua, c.cons_gas, c.cons_luz_publica, c.cons_f_agua, c.cons_f_asf, c.cons_vehiculo, c.cons_seguridad +
 c.cons_luz +
@@ -198,7 +200,7 @@ c.cons_gas +
 c.cons_luz_publica +
 c.cons_f_agua +
 c.cons_f_asf +
-c.cons_vehiculo as total, c.cons_pagado
+c.cons_vehiculo as total, c.cons_fecha_pago
         FROM Consumos c
         JOIN propietarios p on p.prop_id = c.cons_prop_id
         join Costos co on co.cos_id = c.cons_cost_id"""
@@ -209,13 +211,13 @@ c.cons_vehiculo as total, c.cons_pagado
 
     # print("tirando", n_datos[0], "\n" * 2, datos[0])
 
-    barrios.actualizar(mesAhora)
-
     return jsonify(n_datos)
 
 
 @app.route("/consumos/<id>")
 def consumosId(id):
+    barrios.actualizar()
+
     datos = barrios.fetchApi(
         """SELECT cons_id, cons_lot_id, cos_mes, cons_seguridad, cons_luz, cons_agua, cons_gas, cons_luz_publica, cons_f_agua, cons_f_asf, cons_vehiculo
         FROM Consumos c
@@ -225,8 +227,6 @@ def consumosId(id):
             id
         )
     )
-
-    barrios.actualizar(mesAhora)
 
     return jsonify(datos)
 

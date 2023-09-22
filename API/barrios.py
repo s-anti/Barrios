@@ -11,7 +11,7 @@ class Barrios:
                 os.remove(path)
                 print("Eliminando la base de datos en", path)
             except:
-                print("No se eliminó la base de datos en", path)
+                print("No se eliminó la base de datos en", path, "(capaz se creó)")
 
         self.conn = sql.connect(path, check_same_thread=False)
         self.conn.row_factory = sql.Row
@@ -110,7 +110,7 @@ class Barrios:
                 cons_f_agua FLOAT NOT NULL,
                 cons_f_asf FLOAT NOT NULL,
                 cons_vehiculo FLOAT NOT NULL,
-                cons_pagado BOOLEAN NOT NULL DEFAULT FALSE,
+                cons_fecha_pago date,
                 FOREIGN KEY (cons_lot_id) REFERENCES Lotes (lote_id),
                 FOREIGN KEY (cons_prop_id) REFERENCES Propietarios (prop_id),
                 FOREIGN KEY (cons_cost_id) REFERENCES Costos (cos_id) --,
@@ -121,7 +121,7 @@ class Barrios:
 
     def fetchDatos(self, query: str):
         cur = self.conn.cursor()
-        print("Query es ", query)
+        # print("Query es ", query)
         cur.execute(query)
         a = cur.fetchall()
         cur.close()
@@ -129,7 +129,7 @@ class Barrios:
 
     def insertarMuestras(self):
         if self.fetchDatos("SELECT * FROM Costos") == []:
-            print("??")
+            print("Costos no tiene, agregando")
             self.cur.execute(
                 "INSERT INTO Costos VALUES (NULL,?,?,?,?,?,?,?,?,?,?)",
                 (
@@ -145,12 +145,13 @@ class Barrios:
                     "2023-08",
                 ),
             )
+        self.conn.commit()
 
         prop_data = [
-            ["Perez", "Luis"],
-            ["Martinez", "Marcos"],
-            ["Gomez", "Lucas"],
-            ["Perez", "Luis"],
+            ["María", "Rodriguez"],
+            ["Juan", "López"],
+            ["Ana", "García"],
+            ["Carlos", "Matínez"],
         ]
         if self.fetchDatos("SELECT * FROM Propietarios") == []:
             self.cur.executemany(
@@ -225,146 +226,178 @@ class Barrios:
         self.conn.commit()
         print("Insertamos los datos de muestra")
 
-    def actualizar(self, mes):
-        # TODO: que pase el mes para cargar o algo
-        print("Mes aca es ", mes)
-        datos = self.fetchDatos(
-            """SELECT l.*, p.*, pl.*
-            FROM PropLoteMes pl
-            JOIN Propietarios p on pl.pl_prop_id = p.prop_id
-            JOIN Lotes l on pl.pl_lote_id = l.lote_id
-            WHERE pl.pl_cons_mes = '{}'
-            """.format(
-                mes
-            )
-        )
-        print(
-            """SELECT l.*, p.*, pl.*
-            FROM PropLoteMes pl
-            JOIN Propietarios p on pl.pl_prop_id = p.prop_id
-            JOIN Lotes l on pl.pl_lote_id = l.lote_id
-            WHERE pl.pl_cons_mes = '{}'
-            """.format(
-                mes
-            )
-        )
-        print("Nos tira", datos)
-        if len(datos) == 0:
-            print("Algo faltó")
-            return
-        mesId = self.fetchDatos(f"SELECT cos_id FROM Costos where cos_mes = '{mes}'")[
-            0
-        ]["cos_id"]
+    def actualizar(self):
+        a = self.fetchDatos("select cos_mes from costos")
 
-        costos = self.fetchDatos(f"SELECT * FROM Costos where cos_mes = '{mes}'")
-        consumos = self.fetchDatos(f"SELECT * FROM Consumos")
+        print("a es ", a)
+        for mesV in a:
+            print("\n")
+            print(mesV)
+            mes = str(list(mesV)[0])
+            print("en for con mes", mes)
 
-        # ESTA ES UNA SOLUCIÓN MEDIO BRUSCA PERO YA FUE QUEDAAa
-        for rowC in consumos:
-            for rowP in datos:
-                if (
-                    str(rowC["cons_cost_id"]) == str(mesId)
-                    and str(rowC["cons_prop_id"]) == str(rowP["prop_id"])
-                    and str(rowC["cons_lot_id"]) == str(rowP["lote_id"])
-                ):
-                    self.cur.execute(
-                        f"DELETE FROM Consumos WHERE cons_cost_id = {mesId} AND cons_prop_id = {rowP['prop_id']} AND cons_lot_id = {rowP['lote_id']}"
+            datos = self.fetchDatos(
+                """SELECT l.*, p.*, pl.*
+                FROM PropLoteMes pl
+                JOIN Propietarios p on pl.pl_prop_id = p.prop_id
+                JOIN Lotes l on pl.pl_lote_id = l.lote_id
+                WHERE pl.pl_cons_mes = '{}'
+                """.format(
+                    mes
+                )
+            )
+
+            if len(datos) == 0:
+                print("len(datos) es 0; algo faltó...")
+                return
+
+            mesId = self.fetchDatos(
+                f"SELECT cos_id FROM Costos where cos_mes = '{mes}'"
+            )[0]["cos_id"]
+
+            costos = self.fetchDatos(f"SELECT * FROM Costos where cos_mes = '{mes}'")
+
+            pago_lot = []
+            pago_prop = []
+            pago_seguridad = []
+            pago_luz = []
+            pago_agua = []
+            pago_gas = []
+            pago_luz_publica = []
+            pago_f_agua = []
+            pago_f_asf = []
+            pago_vehiculo = []
+            pago_costos = []
+
+            lotes_construidos = 0
+            lotes_luz = 0
+
+            for i in datos:
+                # TODO: Optimizar
+                # print(i["pl_superficie_cub"])
+                if i["pl_superficie_cub"] > 0:
+                    lotes_construidos += 1
+
+                if i["lote_luz_bool"]:
+                    lotes_luz += 1
+
+            pago_lote_const = costos[0]["cos_seguridad"] / (
+                len(datos) + lotes_construidos
+            )
+            pago_lote_no_const = pago_lote_const * 2
+
+            for i in datos:
+                pago_lot.append(i["lote_id"])
+                pago_prop.append(i["prop_id"])
+
+                if i["pl_superficie_cub"] > 0:
+                    pago_seguridad.append(pago_lote_const)
+                else:
+                    pago_seguridad.append(pago_lote_no_const)
+
+                # TODO: MES
+                pago_luz.append(costos[0]["cos_kw"] * i["pl_cons_luz"])
+                pago_agua.append(costos[0]["cos_m3_agua"] * i["pl_cons_agua"])
+                pago_gas.append(costos[0]["cos_m3_gas"] * i["pl_cons_gas"])
+
+                if i["lote_luz_bool"]:
+                    # TODO: MES
+                    pago_luz_publica.append(costos[0]["cos_total_luz"] / lotes_luz)
+                else:
+                    pago_luz_publica.append(0)
+
+                if i["lote_esq_bool"]:
+                    # TODO: MES
+                    pago_f_agua.append(
+                        costos[0]["cos_mf_agua"]
+                        * (i["lote_m_frente"] + i["lote_m_prof"])
                     )
+                    pago_f_asf.append(
+                        costos[0]["cos_mf_asf"]
+                        * (i["lote_m_frente"] + i["lote_m_prof"])
+                    )
+                else:
+                    pago_f_agua.append(costos[0]["cos_mf_agua"] * (i["lote_m_prof"]))
+                    pago_f_asf.append(costos[0]["cos_mf_asf"] * (i["lote_m_prof"]))
 
-        pago_lot = []
-        pago_prop = []
-        pago_seguridad = []
-        pago_luz = []
-        pago_agua = []
-        pago_gas = []
-        pago_luz_publica = []
-        pago_f_agua = []
-        pago_f_asf = []
-        pago_vehiculo = []
-        pago_costos = []
+                pago_vehiculo.append(costos[0]["cos_vehiculos"] * i["pl_vehiculos"])
 
-        lotes_construidos = 0
-        lotes_luz = 0
+                pago_costos.append(mesId)
 
-        for i in datos:
-            # TODO: Optimizar
-            # print(i["pl_superficie_cub"])
-            if i["pl_superficie_cub"] > 0:
-                lotes_construidos += 1
+            lista = [
+                pago_lot,
+                pago_prop,
+                pago_costos,
+                pago_seguridad,
+                pago_luz,
+                pago_agua,
+                pago_gas,
+                pago_luz_publica,
+                pago_f_agua,
+                pago_f_asf,
+                pago_vehiculo,
+            ]
+            transpuesta = []
 
-            if i["lote_luz_bool"]:
-                lotes_luz += 1
+            for i in range(len(lista[0])):
+                f = []
+                for j in range(len(lista)):
+                    f.append(lista[j][i])
+                transpuesta.append(f)
 
-        # TODO: MES
+            trans2 = transpuesta.copy()
+            # ESTA ES UNA SOLUCIÓN MEDIO BRUSCA PERO YA FUE QUEDAAa
+            for i in trans2:
+                print("\n" * 2)
 
-        pago_lote_const = costos[0]["cos_seguridad"] / (len(datos) + lotes_construidos)
-        pago_lote_no_const = pago_lote_const * 2
-
-        for i in datos:
-            pago_lot.append(i["lote_id"])
-            pago_prop.append(i["prop_id"])
-
-            if i["pl_superficie_cub"] > 0:
-                pago_seguridad.append(pago_lote_const)
-            else:
-                pago_seguridad.append(pago_lote_no_const)
-
-            # TODO: MES
-            pago_luz.append(costos[0]["cos_kw"] * i["pl_cons_luz"])
-            pago_agua.append(costos[0]["cos_m3_agua"] * i["pl_cons_agua"])
-            pago_gas.append(costos[0]["cos_m3_gas"] * i["pl_cons_gas"])
-
-            if i["lote_luz_bool"]:
-                # TODO: MES
-                pago_luz_publica.append(costos[0]["cos_total_luz"] / lotes_luz)
-            else:
-                pago_luz_publica.append(0)
-
-            if i["lote_esq_bool"]:
-                # TODO: MES
-                pago_f_agua.append(
-                    costos[0]["cos_mf_agua"] * (i["lote_m_frente"] + i["lote_m_prof"])
+                print(
+                    "Arranca el for i es",
+                    i,
+                    "tra",
                 )
-                pago_f_asf.append(
-                    costos[0]["cos_mf_asf"] * (i["lote_m_frente"] + i["lote_m_prof"])
+                [print(asd) for asd in transpuesta]
+                d = self.fetchDatos(
+                    f"""SELECT * FROM Consumos where cons_lot_id = {i[0]} and cons_prop_id = {i[1]} and cons_cost_id = {i[2]}"""
                 )
-            else:
-                pago_f_agua.append(costos[0]["cos_mf_agua"] * (i["lote_m_prof"]))
-                pago_f_asf.append(costos[0]["cos_mf_asf"] * (i["lote_m_prof"]))
 
-            pago_vehiculo.append(costos[0]["cos_vehiculos"] * i["pl_vehiculos"])
+                if d:
+                    esIgual = True
 
-            pago_costos.append(mesId)
+                    for j in range(3, 11):
+                        print("i[j] es", i[j], "d[0][j + 1]", d[0][j + 1])
+                        if i[j] != d[0][j + 1]:
+                            ban = False
 
-        lista = [
-            pago_lot,
-            pago_prop,
-            pago_costos,
-            pago_seguridad,
-            pago_luz,
-            pago_agua,
-            pago_gas,
-            pago_luz_publica,
-            pago_f_agua,
-            pago_f_asf,
-            pago_vehiculo,
-        ]
-        transpuesta = []
+                            break
+                    if not esIgual:
+                        c = self.conn.cursor()
 
-        for i in range(len(lista[0])):
-            f = []
-            for j in range(len(lista)):
-                f.append(lista[j][i])
-            transpuesta.append(f)
+                        c.execute("delete from consumos where cons_id = ?", (d[0][0],))
+                        print("borrando")
 
-        cur = self.conn.cursor()
+                        self.conn.commit()
+                        c.close()
+                    else:
+                        transpuesta.remove(i)
 
-        cur.executemany(
-            "INSERT INTO Consumos Values (NULL,?,?,?,?,?,?,?,?,?,?,?, FALSE)",
-            transpuesta,
-        )
+                print("\n" * 2)
 
-        self.conn.commit()
+                print(
+                    "termina el for i es",
+                    i,
+                    "tra",
+                )
+                [print(asd) for asd in transpuesta]
+                print("\n" * 2)
+
+            cur = self.conn.cursor()
+
+            cur.executemany(
+                "INSERT INTO Consumos Values (NULL,?,?,?,?,?,?,?,?,?,?,?, FALSE)",
+                transpuesta,
+            )
+            print("Metiendo datos")
+            self.conn.commit()
 
         print("Actualizamos los datos")
 
@@ -393,8 +426,8 @@ class Barrios:
         self.conn.commit()
 
     def ejecutar(self, query: str):
-        print("El query es ")
-        print(query)
+        # print("El query es ")
+        # print(query)
         cur = self.conn.cursor()
         cur.execute(query)
         cur.close()
@@ -412,4 +445,4 @@ if __name__ == "__main__":
     b = Barrios(path)
     b.crearTablas()
     b.insertarMuestras()
-    b.actualizar("2023-08")
+    b.actualizar()

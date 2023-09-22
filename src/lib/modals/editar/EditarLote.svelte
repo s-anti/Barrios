@@ -32,7 +32,7 @@
 						<div class="w-full">
 							<label class="capitalize" for="lote_id">ID:</label>
 							<input
-								class="text-white w-10 px-2 rounded-md"
+								class="text-white w-10 px-2 rounded-md bg-stone-500"
 								type="text"
 								name="lote_id"
 								id="lote_id"
@@ -46,7 +46,7 @@
 								>{$_("manzana")}</label
 							>
 							<input
-								class="text-white w-10 px-2 rounded-md"
+								class="text-white w-10 px-2 rounded-md bg-stone-500"
 								type="text"
 								name="lote_manz_id"
 								id="lote_manz_id"
@@ -57,17 +57,9 @@
 					</div>
 					<div>
 						<p class="capitalize">{$_("propietario")}</p>
-						{#if Object.values(data[8])[0] != null}
-							<p class="text-stone-300 capitalize font-light">
-								{Object.values(data[8])}
-							</p>
-						{:else}
-							<p class="text-stone-300 capitalize font-light">
-								{$_("ninguno")}
-							</p>
-						{/if}
+
 						<input
-							class="rounded-md pl-2"
+							class="rounded-md pl-2 bg-stone-500"
 							type="select"
 							required
 							readonly

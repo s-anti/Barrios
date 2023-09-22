@@ -21,7 +21,7 @@
 	import { tablasInfo } from "../store";
 	import { link } from "svelte-spa-router";
 
-	export const rowNumber = 7;
+	export let rowNumber;
 
 	let indexFrom = 0;
 	let indexTo = rowNumber;
@@ -31,7 +31,6 @@
 	const fetchData = (async () => {
 		const response = await fetch(`http://127.0.0.1:5000/${table}`);
 		const data = await response.json();
-		console.log(data, "Como datra");
 		return data;
 	})();
 
@@ -134,13 +133,17 @@
 										{:else if columns[i][1] === "lote"}
 											{data}
 										{:else if columns[i][1] === "propietario"}
-											<a
-												use:link
-												href={"/propietarios/" +
-													data[1]}
-												class="whitespace-nowrap block text-blue-300 hover:text-blue-400 hover:underline"
-												>{data[0]}</a
-											>
+											{#if data[0] == null}
+												<span> - </span>
+											{:else}
+												<a
+													use:link
+													href={"/propietarios/" +
+														data[1]}
+													class="whitespace-nowrap block text-blue-300 hover:text-blue-400 hover:underline"
+													>{data[0]}</a
+												>
+											{/if}
 										{:else if columns[i][1] === "metros"}
 											{data} m.
 										{:else if columns[i][1] === "m2"}

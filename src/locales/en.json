@@ -78,6 +78,10 @@
     "tieneAgua": "Has water",
 
     "tieneAsfalto": "Has electricity",
-    "tieneEsquina": "Is in a corner"
-
-}
+    "tieneEsquina": "Is in a corner",
+    "consumo": "Bill ID N°",
+    "fechaPago": "Payment date",
+    "editandoLote": "Editing a plot",
+    "editandoConsumo":"Editing a bill"
+  
+}       

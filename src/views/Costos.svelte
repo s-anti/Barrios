@@ -25,10 +25,10 @@
 			agregando = true;
 		}}
 		usaEditar={true}
-		usaEliminar={true}
 		name="costos"
 		storeName="costos"
 		table="costos"
+		rowNumber={7}
 	/>
 	{#if agregando}
 		<AgregarCosto
