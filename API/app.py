@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 import datetime
 
-barrios = Barrios("./API/barrioswerb.sqlite3", True)
+barrios = Barrios("./barrioswerb.sqlite3", True)
 
 barrios.crearTablas()
 barrios.insertarMuestras()
@@ -13,7 +13,8 @@ barrios.actualizar()
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}})
+
 
 # TODO: todo esto
 # Tengo que hacer
@@ -387,4 +388,4 @@ def not_found(error):
     return jsonify({"error": "Not found"}), 404
 
 
-app.run(debug=True, use_reloader=False)
+app.run(debug=False, use_reloader=False, port=5000, host="0.0.0.0")
